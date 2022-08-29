@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+// IMPORTS
+import { useState } from "react"
+import ReactMarkdown from 'https://esm.sh/react-markdown@7'
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import starterText from './starterText'
+import "./App.css"
 
 function App() {
+
+  // VARIABLES
+  const [text, setText] = useState(starterText)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <section className="split">
+      <p className="section-title">Markdown</p>
+      <textarea 
+        autoFocus
+        className="textarea"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      </section>
+      <section>
+      <p className="section-title">Preview</p>
+      <ReactMarkdown 
+        children={text}
+        className="markdown"
+        renders={{
+          code: Component, 
+        }}
+      />
+      </section>
     </div>
   );
 }
-
+const Component = ({value, language}) => {
+  return (
+    <SyntaxHighlighter language={language == null ? '' : language} style={docco}>
+      {value == null ? '' : value}
+    </SyntaxHighlighter>
+  );
+};
 export default App;
